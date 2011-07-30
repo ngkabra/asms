@@ -74,10 +74,11 @@ elif opts.num_msgs:
 else:
     msgs = droid.smsGetMessages(not opts.read).result
 
-for msg in msgs:
-    print '[{id}] {num}: {msg}'.format(id=msg['_id'],
-                                       num=num_to_name(msg['address']),
-                                       msg=msg['body'])
+for i, msg in enumerate(msgs):
+    print '[{id} {alpha}] {num}: {msg}'.format(id=msg['_id'],
+                                               alpha=chr(ord('a')+i),
+                                               num=num_to_name(msg['address']),
+                                               msg=msg['body'])
 
 if not opts.dont_mark and not opts.read and not opts.num_msgs and not opts.bulk_sms_show:
     droid.smsMarkMessageRead([msg['_id'] for msg in msgs], True)

@@ -10,7 +10,7 @@ from myandroid import droid
 from parsephoneno import phone_no
 
 parser = OptionParser()
-parser.add_option('-r', '--replyto', type='int',
+parser.add_option('-r', '--replyto', 
                   help='reply to message with this id')
 parser.add_option('-R', '--ReplyToLast', action='store_true',
                   help='reply to message with this id')
@@ -79,7 +79,12 @@ if opts.replyto or opts.ReplyToLast:
     if opts.ReplyToLast:
         msgid = droid.smsGetMessageIds(False).result[0]
     else:
-        msgid = opts.replyto
+        try:
+            msgid = int(opts.replyto)
+        except ValueError:
+            'maybe it is an relative alphabet'
+            relid = ord(opts.replyto) - ord('a')
+            msgid = droid.smsGetMessageIds(False).result[relid]
     msg = droid.smsGetMessageById(msgid).result
     to_num = msg['address']
 else:
